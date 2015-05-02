@@ -34,7 +34,10 @@ def loadData(path="."):
 
 def cosine_similarity(usr1, usr2, cache={}):
 
-    usr1, usr2 = usr1,usr2 if usr1 > usr2 else usr2,usr1
+    if not usr1 or not usr2:
+        return 0
+
+    (usr1,usr2) = (usr1,usr2) if usr1 > usr2 else (usr2,usr1)
     if (usr1, usr2) in cache: return cache[(usr1, usr2)]
 
     usr1VSet = set(usr_venue_rating[usr1].keys()) if usr1 in usr_venue_rating else set()
@@ -118,7 +121,8 @@ def getRecommendations(usr, n=-1, fn_similarity = pearson_simple_similarity):
 if __name__ == '__main__':
     loadData("./data/")
     for uid in friends:
-        if uid == 15:
+        if uid == 5:
             print 'Friends of [%d] are =' % uid, friends[uid]
             print getRecommendations(uid, fn_similarity = pearson_simple_similarity)
+            #print getRecommendations(uid, fn_similarity = cosine_similarity)
             print '-'*50
